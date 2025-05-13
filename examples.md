@@ -19,10 +19,10 @@ llm = ChatOpenAI(
 )
 task = 'Go to kayak.com and find the cheapest flight from Zurich to San Francisco on 2025-05-01'
 
-**agent = Agent(task=task, llm=llm)**
+agent = Agent(task=task, llm=llm)
 
 async def main():
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(main())
@@ -43,7 +43,7 @@ from browser_use import Agent, Browser, BrowserConfig
 
 browser = Browser(
 	config=BrowserConfig(
-		**browser_binary_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',**
+		browser_binary_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 	)
 )
 
@@ -51,7 +51,7 @@ async def main():
 	agent = Agent(
 		task='In docs.google.com write my Papa a quick letter',
 		llm=ChatOpenAI(model='gpt-4o'),
-		**browser=browser,**
+		browser=browser,
 	)
 
 	await agent.run()
@@ -76,12 +76,12 @@ llm = ChatOpenAI(model='gpt-4o')
 browser = Browser(
 	config=BrowserConfig(
 		headless=False,
-		**disable_security=False,**
-		**keep_alive=True,**
-		**new_context_config=BrowserContextConfig(**
-			**keep_alive=True,**
-			**disable_security=False,**
-		**),**
+		disable_security=False,
+		keep_alive=True,
+		new_context_config=BrowserContextConfig(
+			keep_alive=True,
+			disable_security=False,
+		),
 	)
 )
 
@@ -89,7 +89,7 @@ async def main():
 	agent = Agent(
 		task="Go to https://bot-detector.rebrowser.net/ and verify that all the bot checks are passed.",
 		llm=llm,
-		**browser=browser,**
+		browser=browser,
 	)
 	await agent.run()
 	# ... more tasks ...
@@ -116,7 +116,7 @@ load_dotenv()
 browser = Browser(
 	config=BrowserConfig(
 		headless=False,
-		**cdp_url='http://localhost:9222',**
+		cdp_url='http://localhost:9222',
 	)
 )
 controller = Controller()
@@ -128,7 +128,7 @@ async def main():
 		task=task,
 		llm=model,
 		controller=controller,
-		**browser=browser,**
+		browser=browser,
 	)
 
 	await agent.run()
@@ -161,12 +161,12 @@ from browser_use.agent.views import ActionResult
 
 controller = Controller()
 
-**@controller.registry.action('Copy text to clipboard')**
+@controller.registry.action('Copy text to clipboard')
 def copy_to_clipboard(text: str):
     pyperclip.copy(text)
     return ActionResult(extracted_content=text)
 
-**@controller.registry.action('Paste text from clipboard')**
+@controller.registry.action('Paste text from clipboard')
 async def paste_from_clipboard(browser: BrowserContext):
     text = pyperclip.paste()
     # send text to browser
@@ -179,7 +179,7 @@ async def main():
     agent = Agent(
         task=task,
         llm=ChatOpenAI(model='gpt-4o'),
-        **controller=controller**,
+        controller=controller,
         browser=browser,
     )
     await agent.run()
@@ -233,7 +233,7 @@ agent = Agent(
 
 async def run_agent():
     try:
-        **await agent.run(on_step_start=record_activity, max_steps=30)**
+        await agent.run(on_step_start=record_activity, max_steps=30)
     except Exception as e:
         print(e)
 
@@ -261,7 +261,7 @@ browser = Browser(
 )
 controller = Controller()
 
-**@controller.action('Upload file to interactive element with file path ')**
+@controller.action('Upload file to interactive element with file path ')
 async def upload_file(index: int, path: str, browser: BrowserContext, available_file_paths: list[str]):
     if path not in available_file_paths:
         return ActionResult(error=f'File path {path} is not available')
@@ -278,12 +278,12 @@ async def upload_file(index: int, path: str, browser: BrowserContext, available_
     file_upload_el = await browser.get_locate_element(file_upload_dom_el)
 
     try:
-        **await file_upload_el.set_input_files(path)**
+        await file_upload_el.set_input_files(path)
         return ActionResult(extracted_content=f'Successfully uploaded file to index {index}', include_in_memory=True)
     except Exception as e:
         return ActionResult(error=f'Failed to upload file to index {index}: {str(e)}')
 
-**@controller.action('Read the file content of a file given a path')**
+@controller.action('Read the file content of a file given a path')
 async def read_file(path: str, available_file_paths: list[str]):
     if path not in available_file_paths:
         return ActionResult(error=f'File path {path} is not available')
@@ -303,9 +303,9 @@ async def main():
     agent = Agent(
         task='Go to website and upload files to fields',
         llm=ChatOpenAI(model='gpt-4o'),
-        **controller=controller**,
-        **browser=browser**,
-        **available_file_paths=available_file_paths**,
+        controller=controller,
+        browser=browser,
+        available_file_paths=available_file_paths,
     )
     await agent.run()
 ```
@@ -329,10 +329,10 @@ class HoverAction(BaseModel):
 
 controller = Controller()
 
-**@controller.registry.action(
+@controller.registry.action(
     'Hover over an element',
     param_model=HoverAction,
-)**
+)
 async def hover_element(params: HoverAction, browser: BrowserContext):
     """
     Hovers over the element specified by its index from the cached selector map or by XPath.
@@ -357,7 +357,7 @@ async def hover_element(params: HoverAction, browser: BrowserContext):
         raise Exception('Either index or xpath must be provided')
 
     try:
-        **await element_handle.hover()**
+        await element_handle.hover()
         return ActionResult(extracted_content=f'🖱️ Hovered over element', include_in_memory=True)
     except Exception as e:
         raise Exception(f'Failed to hover over element: {str(e)}')
@@ -367,7 +367,7 @@ async def main():
     agent = Agent(
         task=task,
         llm=ChatOpenAI(model='gpt-4o'),
-        **controller=controller**,
+        controller=controller,
     )
     await agent.run()
 ```
@@ -385,18 +385,18 @@ from browser_use.agent.views import ActionResult
 
 controller = Controller()
 
-**@controller.registry.action('Done with task ')**
+@controller.registry.action('Done with task ')
 async def done(text: str):
     # To send emails use
     # STEP 1: go to https://support.google.com/accounts/answer/185833
     # STEP 2: Create an app password (you can't use here your normal gmail password)
     # STEP 3: Use the app password in the code below for the password
     yag = yagmail.SMTP('your_email@gmail.com', 'your_app_password')
-    **yag.send(
+    yag.send(
         to='recipient@example.com',
         subject='Test Email',
         contents=f'result\n: {text}',
-    )**
+    )
 
     return ActionResult(is_done=True, extracted_content='Email sent!')
 
@@ -405,7 +405,7 @@ async def main():
     agent = Agent(
         task=task,
         llm=ChatOpenAI(model='gpt-4o'),
-        **controller=controller**
+        controller=controller
     )
     await agent.run()
 ```
@@ -460,20 +460,20 @@ from browser_use.agent.views import ActionResult
 
 controller = Controller()
 
-**class Model(BaseModel):
+class Model(BaseModel):
 	title: str
 	url: str
 	likes: int
-	license: str**
+	license: str
 
-**class Models(BaseModel):
-	models: list[Model]**
+class Models(BaseModel):
+	models: list[Model]
 
-**@controller.action('Save models', param_model=Models)**
+@controller.action('Save models', param_model=Models)
 def save_models(params: Models):
-	**with open('models.txt', 'a') as f:
+	with open('models.txt', 'a') as f:
 		for model in params.models:
-			f.write(f'{model.title} ({model.url}): {model.likes} likes, {model.license}\n')**
+			f.write(f'{model.title} ({model.url}): {model.likes} likes, {model.license}\n')
 
 async def main():
 	task = 'Look up models with a license of cc-by-sa-4.0 and sort by most likes on Hugging face, save top 5 to file.'
@@ -481,7 +481,7 @@ async def main():
 	agent = Agent(
 		task=task,
 		llm=ChatOpenAI(model='gpt-4o'),
-		**controller=controller**
+		controller=controller
 	)
 
 	await agent.run()
@@ -500,14 +500,14 @@ from browser_use import Agent, Controller, ActionResult
 controller = Controller()
 
 
-**class DoneResult(BaseModel):
+class DoneResult(BaseModel):
 	title: str
 	comments: str
-	hours_since_start: int**
+	hours_since_start: int
 
 
 # we overwrite done() in this example to demonstrate the validator
-**@controller.registry.action('Done with task', param_model=DoneResult)**
+@controller.registry.action('Done with task', param_model=DoneResult)
 async def done(params: DoneResult):
 	result = ActionResult(is_done=True, extracted_content=params.model_dump_json())
 	print(result)
@@ -518,7 +518,7 @@ async def done(params: DoneResult):
 async def main():
 	task = 'Go to hackernews hn and give me the top 1 post'
 	model = ChatOpenAI(model='gpt-4o')
-	**agent = Agent(task=task, llm=model, controller=controller, validate_output=True)**
+	agent = Agent(task=task, llm=model, controller=controller, validate_output=True)
 	# NOTE: this should fail to demonstrate the validator
 	await agent.run(max_steps=5)
 ```
@@ -553,9 +553,9 @@ async def main():
         agent = Agent(
             task=task,
             llm=llm,
-            **controller=controller**,
+            controller=controller,
         )
-        **await agent.run()**
+        await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(main())
@@ -575,20 +575,20 @@ from browser_use.browser.browser import Browser, BrowserConfig
 
 browser = Browser(
     config=BrowserConfig(
-        **browser_binary_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',**
+        browser_binary_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     )
 )
 controller = Controller()
 
 async def main():
     agent = Agent(
-        **task='Click "Go cross-site (simple page)" button on https://csreis.github.io/tests/cross-site-iframe.html then tell me the text within',**
+        task='Click "Go cross-site (simple page)" button on https://csreis.github.io/tests/cross-site-iframe.html then tell me the text within',
         llm=ChatOpenAI(model='gpt-4o', temperature=0.0),
         controller=controller,
-        **browser=browser,**
+        browser=browser,
     )
 
-    **await agent.run()**
+    await agent.run()
     await browser.close()
 
 if __name__ == '__main__':
@@ -605,16 +605,16 @@ Define a Pydantic model to structure the agent's final output, for example, extr
 from pydantic import BaseModel
 from browser_use import Agent, Controller
 
-**class Post(BaseModel):
+class Post(BaseModel):
 	post_title: str
 	post_url: str
 	num_comments: int
-	hours_since_post: int**
+	hours_since_post: int
 
-**class Posts(BaseModel):
-	posts: list[Post]**
+class Posts(BaseModel):
+	posts: list[Post]
 
-**controller = Controller(output_model=Posts)**
+controller = Controller(output_model=Posts)
 
 async def main():
 	task = 'Go to hackernews show hn and give me the first 5 posts'
@@ -625,7 +625,7 @@ async def main():
 
 	result = history.final_result()
 	if result:
-		**parsed: Posts = Posts.model_validate_json(result)**
+		parsed: Posts = Posts.model_validate_json(result)
 
 		for post in parsed.posts:
 			print(f'Title:            {post.post_title}')
@@ -645,16 +645,16 @@ import asyncio
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
 
-**extend_system_message = (
+extend_system_message = (
     'REMEMBER the most important RULE: ALWAYS open first a new tab and go first to url wikipedia.com no matter the task!!!'
-)**
+)
 
 # or use override_system_message to completely override the system prompt
 
 async def main():
     task = "do google search to find images of Elon Musk's wife"
     model = ChatOpenAI(model='gpt-4o')
-    **agent = Agent(task=task, llm=model, extend_system_message=extend_system_message)**
+    agent = Agent(task=task, llm=model, extend_system_message=extend_system_message)
 
     print(
         json.dumps(
@@ -685,12 +685,12 @@ browser = Browser(
     )
 )
 
-**browser_context = BrowserContext(config=BrowserContextConfig(user_agent='foobarfoo'), browser=browser)**
+browser_context = BrowserContext(config=BrowserContextConfig(user_agent='foobarfoo'), browser=browser)
 
 agent = Agent(
     task='go to https://whatismyuseragent.com and find the current user agent string',
     llm=ChatOpenAI(model='gpt-4o'),
-    **browser_context=browser_context**,
+    browser_context=browser_context,
     use_vision=True,
 )
 
@@ -716,19 +716,19 @@ from browser_use.browser.context import BrowserContextConfig
 
 browser = Browser(
     config=BrowserConfig(
-        **new_context_config=BrowserContextConfig(save_downloads_path=os.path.join(os.path.expanduser('~'), 'downloads'))**
+        new_context_config=BrowserContextConfig(save_downloads_path=os.path.join(os.path.expanduser('~'), 'downloads'))
     )
 )
 
 async def run_download():
     agent = Agent(
-        **task='Go to "https://file-examples.com/" and download the smallest doc file.',**
+        task='Go to "https://file-examples.com/" and download the smallest doc file.',
         llm=ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp'),
         max_actions_per_step=8,
         use_vision=True,
-        **browser=browser,**
+        browser=browser,
     )
-    **await agent.run(max_steps=25)**
+    await agent.run(max_steps=25)
     await browser.close()
 ```
 
@@ -743,21 +743,21 @@ import asyncio
 from langchain_google_genai import ChatGoogleGenerativeAI
 from browser_use import Agent
 
-**task = """
+task = """
 Navigate to: https://sortablejs.github.io/Sortable/.
 Then scroll down to the first examplw with title "Simple list example".
 Drag the element with name "item 1" to below the element with name "item 3".
-"""**
+"""
 
 async def run_search():
     agent = Agent(
         task=task,
         llm=ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp'),
         max_actions_per_step=1,
-        **use_vision=True,**
+        use_vision=True,
     )
 
-    **await agent.run(max_steps=25)**
+    await agent.run(max_steps=25)
 
 if __name__ == '__main__':
     asyncio.run(run_search())
@@ -788,14 +788,14 @@ task = 'Find the founders of browser-use and draft them a short personalized mes
 agent = Agent(task=task, llm=ChatOpenAI(model='gpt-4o'), controller=controller, browser=browser)
 
 async def main():
-    **await agent.run()**
+    await agent.run()
 
     # new_task = input('Type in a new task: ')
     new_task = 'Find an image of the founders'
 
-    **agent.add_new_task(new_task)**
+    agent.add_new_task(new_task)
 
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(main())
@@ -811,19 +811,19 @@ Specify a sequence of actions for the agent to perform at the very beginning of 
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
 
-**initial_actions = [
+initial_actions = [
 	{'open_tab': {'url': 'https://www.google.com'}},
 	{'open_tab': {'url': 'https://en.wikipedia.org/wiki/Randomness'}},
 	{'scroll_down': {'amount': 1000}},
-]**
+]
 agent = Agent(
 	task='What theories are displayed on the page?',
-	**initial_actions=initial_actions**,
+	initial_actions=initial_actions,
 	llm=ChatOpenAI(model='gpt-4o'),
 )
 
 async def main():
-	**await agent.run(max_steps=10)**
+	await agent.run(max_steps=10)
 
 if __name__ == '__main__':
 	import asyncio
@@ -843,12 +843,12 @@ from browser_use import Agent
 # video: https://preview.screen.studio/share/clenCmS6
 llm = ChatOpenAI(model='gpt-4o')
 agent = Agent(
-	**task='open 3 tabs with elon musk, trump, and steve jobs, then go back to the first and stop'**,
+	task='open 3 tabs with elon musk, trump, and steve jobs, then go back to the first and stop',
 	llm=llm,
 )
 
 async def main():
-	**await agent.run()**
+	await agent.run()
 
 asyncio.run(main())
 ```
@@ -866,8 +866,8 @@ from browser_use import Agent, Browser
 
 async def main():
     # Persist the browser state across agents
-    **browser = Browser()**
-    **async with await browser.new_context() as context:**
+    browser = Browser()
+    async with await browser.new_context() as context:
         model = ChatOpenAI(model='gpt-4o')
         current_agent = None
 
@@ -882,17 +882,17 @@ async def main():
             if task.lower() == 'p':
                 # Pause the current agent if one exists
                 if current_agent:
-                    **current_agent.pause()**
+                    current_agent.pause()
                 continue
             elif task.lower() == 'r':
                 # Resume the current agent if one exists
                 if current_agent:
-                    **current_agent.resume()**
+                    current_agent.resume()
                 continue
             elif task.lower() == 'b':
                 # Break the current agent's execution if one exists
                 if current_agent:
-                    **current_agent.stop()**
+                    current_agent.stop()
                     current_agent = None
                 continue
 
@@ -901,14 +901,14 @@ async def main():
                 current_agent.pause()
 
             # Create and run new agent with the task
-            **current_agent = Agent(
+            current_agent = Agent(
                 task=task,
                 llm=model,
                 browser_context=context,
-            )**
+            )
 
             # Run the agent asynchronously without blocking
-            **asyncio.create_task(current_agent.run())**
+            asyncio.create_task(current_agent.run())
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/multiple_agents_same_browser.py)
@@ -923,7 +923,7 @@ from browser_use.agent.views import AgentState
 from browser_use import Agent
 
 # Create initial agent state
-**agent_state = AgentState()**
+agent_state = AgentState()
 
 # Use agent with the state
 agent = Agent(
@@ -931,24 +931,24 @@ agent = Agent(
     llm=ChatOpenAI(model='gpt-4o'),
     browser=browser,
     browser_context=browser_context,
-    **injected_agent_state=agent_state**,
+    injected_agent_state=agent_state,
     page_extraction_llm=ChatOpenAI(model='gpt-4o-mini'),
 )
 
 done, valid = await agent.take_step()
 
 # Clear history before saving state
-**agent_state.history.history = []**
+agent_state.history.history = []
 
 # Save state to file
-**async with await anyio.open_file('agent_state.json', 'w') as f:
+async with await anyio.open_file('agent_state.json', 'w') as f:
     serialized = agent_state.model_dump_json(exclude={'history'})
-    await f.write(serialized)**
+    await f.write(serialized)
 
 # Load state back from file
-**async with await anyio.open_file('agent_state.json', 'r') as f:
+async with await anyio.open_file('agent_state.json', 'r') as f:
     loaded_json = await f.read()
-    agent_state = AgentState.model_validate_json(loaded_json)**
+    agent_state = AgentState.model_validate_json(loaded_json)
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/outsource_state.py)
@@ -986,7 +986,7 @@ async def main():
         ]
     ]
 
-    **await asyncio.gather(*[agent.run() for agent in agents])**
+    await asyncio.gather(*[agent.run() for agent in agents])
 
     # Run another agent after parallel agents complete
     agentX = Agent(
@@ -1022,7 +1022,7 @@ class AgentController:
     async def run_agent(self):
         """Run the agent"""
         self.running = True
-        **await self.agent.run()**
+        await self.agent.run()
 
     def start(self):
         """Start the agent in a separate thread"""
@@ -1032,15 +1032,15 @@ class AgentController:
 
     def pause(self):
         """Pause the agent"""
-        **self.agent.pause()**
+        self.agent.pause()
 
     def resume(self):
         """Resume the agent"""
-        **self.agent.resume()**
+        self.agent.resume()
 
     def stop(self):
         """Stop the agent"""
-        **self.agent.stop()**
+        self.agent.stop()
         self.running = False
 
 async def main():
@@ -1051,20 +1051,20 @@ async def main():
 
     if choice == '1' and not agent_thread:
         print('Starting agent...')
-        **agent_thread = threading.Thread(target=controller.start)
-        agent_thread.start()**
+        agent_thread = threading.Thread(target=controller.start)
+        agent_thread.start()
 
     elif choice == '2':
         print('Pausing agent...')
-        **controller.pause()**
+        controller.pause()
 
     elif choice == '3':
         print('Resuming agent...')
-        **controller.resume()**
+        controller.resume()
 
     elif choice == '4':
         print('Stopping agent...')
-        **controller.stop()**
+        controller.stop()
         if agent_thread:
             agent_thread.join()
             agent_thread = None
@@ -1081,15 +1081,15 @@ from langchain_openai import ChatOpenAI
 from browser_use import Agent
 
 llm = ChatOpenAI(model='gpt-4o', temperature=0.0)
-**planner_llm = ChatOpenAI(
+planner_llm = ChatOpenAI(
 	model='o3-mini',
-)**
+)
 task = 'your task'
 
-**agent = Agent(task=task, llm=llm, planner_llm=planner_llm, use_vision_for_planner=False, planner_interval=1)**
+agent = Agent(task=task, llm=llm, planner_llm=planner_llm, use_vision_for_planner=False, planner_interval=1)
 
 async def main():
-	**await agent.run()**
+	await agent.run()
 
 if __name__ == '__main__':
 	asyncio.run(main())
@@ -1134,7 +1134,7 @@ async def main():
         task=TASK_DESCRIPTION,
         llm=llm,
         browser=browser,
-        **save_playwright_script_path=str(SCRIPT_PATH)**,  # Pass the path as a string
+        save_playwright_script_path=str(SCRIPT_PATH),  # Pass the path as a string
     )
 
     print('Running the agent to generate the Playwright script...')
@@ -1172,25 +1172,25 @@ from browser_use.browser.context import BrowserContextConfig
 llm = ChatOpenAI(model='gpt-4o', temperature=0.0)
 task = "go to google.com and search for openai.com and click on the first link then extract content and scroll down"
 
-**allowed_domains = ['google.com']**
+allowed_domains = ['google.com']
 
 browser = Browser(
 	config=BrowserConfig(
 		browser_binary_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-		**new_context_config=BrowserContextConfig(
+		new_context_config=BrowserContextConfig(
 			allowed_domains=allowed_domains,
-		),**
+		),
 	),
 )
 
 agent = Agent(
 	task=task,
 	llm=llm,
-	**browser=browser,**
+	browser=browser,
 )
 
 async def main():
-	**await agent.run(max_steps=25)**
+	await agent.run(max_steps=25)
 	# ...
 ```
 
@@ -1211,20 +1211,20 @@ agent = Agent(
     llm=llm,
     browser_context=browser_context,
 )
-**history: AgentHistoryList = await agent.run(max_steps=3)**
+history: AgentHistoryList = await agent.run(max_steps=3)
 
 print('Final Result:')
-**pprint(history.final_result(), indent=4)**
+pprint(history.final_result(), indent=4)
 
 print('\nErrors:')
-**pprint(history.errors(), indent=4)**
+pprint(history.errors(), indent=4)
 
 # e.g. xPaths the model clicked on
 print('\nModel Outputs:')
-**pprint(history.model_actions(), indent=4)**
+pprint(history.model_actions(), indent=4)
 
 print('\nThoughts:')
-**pprint(history.model_thoughts(), indent=4)**
+pprint(history.model_thoughts(), indent=4)
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/result_processing.py)
@@ -1244,13 +1244,13 @@ llm = ChatOpenAI(model='gpt-4o', temperature=0.0)
 async def main():
     browser = Browser()
 
-    **async with await browser.new_context(config=BrowserContextConfig(trace_path='./tmp/traces/')) as context:**
+    async with await browser.new_context(config=BrowserContextConfig(trace_path='./tmp/traces/')) as context:
         agent = Agent(
             task='Go to hackernews, then go to apple.com and return all titles of open tabs',
             llm=llm,
-            **browser_context=context,**
+            browser_context=context,
         )
-        **await agent.run()**
+        await agent.run()
 
     await browser.close()
 ```
@@ -1270,13 +1270,13 @@ llm = ChatOpenAI(
     temperature=0.0,
 )
 # the model will see x_name and x_password, but never the actual values.
-**sensitive_data = {'x_name': 'my_x_name', 'x_password': 'my_x_password'}**
+sensitive_data = {'x_name': 'my_x_name', 'x_password': 'my_x_password'}
 task = 'go to x.com and login with x_name and x_password then find interesting posts and like them'
 
-**agent = Agent(task=task, llm=llm, sensitive_data=sensitive_data)**
+agent = Agent(task=task, llm=llm, sensitive_data=sensitive_data)
 
 async def main():
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(main())
@@ -1293,12 +1293,12 @@ from langchain_openai import ChatOpenAI
 from browser_use import Agent
 
 llm = ChatOpenAI(model='gpt-4o', temperature=0.0)
-**small_llm = ChatOpenAI(model='gpt-4o-mini', temperature=0.0)**
+small_llm = ChatOpenAI(model='gpt-4o-mini', temperature=0.0)
 task = 'Find the founders of browser-use in ycombinator, extract all links and open the links one by one'
-**agent = Agent(task=task, llm=llm, page_extraction_llm=small_llm)**
+agent = Agent(task=task, llm=llm, page_extraction_llm=small_llm)
 
 async def main():
-	**await agent.run()**
+	await agent.run()
 
 if __name__ == '__main__':
 	asyncio.run(main())
@@ -1345,7 +1345,7 @@ async def main(max_steps=500):
         llm=ChatOpenAI(model='gpt-4o-mini'),
         controller=controller,
         initial_actions=initial_actions,
-        **enable_memory=True**,
+        enable_memory=True,
         browser=browser,
     )
     history = await agent.run(max_steps=max_steps)
@@ -1369,14 +1369,14 @@ from browser_use import Agent, Controller, ActionResult
 controller = Controller()
 
 
-**class DoneResult(BaseModel):
+class DoneResult(BaseModel):
 	title: str
 	comments: str
-	hours_since_start: int**
+	hours_since_start: int
 
 
 # we overwrite done() in this example to demonstrate the validator
-**@controller.registry.action('Done with task', param_model=DoneResult)**
+@controller.registry.action('Done with task', param_model=DoneResult)
 async def done(params: DoneResult):
 	result = ActionResult(is_done=True, extracted_content=params.model_dump_json())
 	print(result)
@@ -1387,7 +1387,7 @@ async def done(params: DoneResult):
 async def main():
 	task = 'Go to hackernews hn and give me the top 1 post'
 	model = ChatOpenAI(model='gpt-4o')
-	**agent = Agent(task=task, llm=model, controller=controller, validate_output=True)**
+	agent = Agent(task=task, llm=model, controller=controller, validate_output=True)
 	# NOTE: this should fail to demonstrate the validator
 	await agent.run(max_steps=5)
 ```
@@ -1437,7 +1437,7 @@ class DiscordBot(commands.Bot):
                     await message.reply('Starting browser use task...', mention_author=True)
 
                 try:
-                    **agent_message = await self.run_agent(message.content.replace(f'{self.prefix} ', '').strip())**
+                    agent_message = await self.run_agent(message.content.replace(f'{self.prefix} ', '').strip())
                     await message.channel.send(content=f'{agent_message}', reference=message, mention_author=True)
                 except Exception as e:
                     await message.channel.send(
@@ -1450,9 +1450,9 @@ class DiscordBot(commands.Bot):
 
     async def run_agent(self, task: str) -> str:
         try:
-            **browser = Browser(config=self.browser_config)**
-            **agent = Agent(task=(task), llm=self.llm, browser=browser)**
-            **result = await agent.run()**
+            browser = Browser(config=self.browser_config)
+            agent = Agent(task=(task), llm=self.llm, browser=browser)
+            result = await agent.run()
 
             agent_message = None
             if result.is_done():
@@ -1483,18 +1483,18 @@ api_key = os.getenv('GEMINI_API_KEY')
 
 llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api_key))
 
-**bot = DiscordBot(
+bot = DiscordBot(
     llm=llm,  # required; instance of BaseChatModel
     prefix='$bu',  # optional; prefix of messages to trigger browser-use
     ack=True,  # optional; whether to acknowledge task receipt with a message
     browser_config=BrowserConfig(
         headless=False
     ),  # optional; useful for changing headless mode or other browser configs
-)**
+)
 
-**bot.run(
+bot.run(
     token=bot_token,  # required; Discord bot token
-)**
+)
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/integrations/discord/discord_example.py)
@@ -1517,7 +1517,7 @@ class SlackBot:
         bot_token: str,
         signing_secret: str,
         ack: bool = False,
-        **browser_config: BrowserConfig = BrowserConfig(headless=True)**,
+        browser_config: BrowserConfig = BrowserConfig(headless=True),
     ):
         self.llm = llm
         self.ack = ack
@@ -1536,16 +1536,16 @@ class SlackBot:
                 )
 
             try:
-                **agent_message = await self.run_agent(task)**
+                agent_message = await self.run_agent(task)
                 await self.send_message(event['channel'], f'<@{user_id}> {agent_message}', thread_ts=event.get('ts'))
             except Exception as e:
                 await self.send_message(event['channel'], f'Error during task execution: {str(e)}', thread_ts=event.get('ts'))
 
     async def run_agent(self, task: str) -> str:
         try:
-            **browser = Browser(config=self.browser_config)**
-            **agent = Agent(task=task, llm=self.llm, browser=browser)**
-            **result = await agent.run()**
+            browser = Browser(config=self.browser_config)
+            agent = Agent(task=task, llm=self.llm, browser=browser)
+            result = await agent.run()
 
             agent_message = None
             if result.is_done():
@@ -1564,7 +1564,7 @@ async def slack_events(request: Request, slack_bot: Annotated[SlackBot, Depends(
     # ... request verification ...
     event_data = await request.json()
     if 'event' in event_data:
-        **await slack_bot.handle_event(event_data.get('event'), event_data.get('event_id'))**
+        await slack_bot.handle_event(event_data.get('event'), event_data.get('event_id'))
     return {}
 ```
 
@@ -1591,7 +1591,7 @@ api_key = os.getenv('GEMINI_API_KEY')
 
 llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api_key))
 
-**slack_bot = SlackBot(
+slack_bot = SlackBot(
     llm=llm,  # required; instance of BaseChatModel
     bot_token=bot_token,  # required; Slack bot token
     signing_secret=signing_secret,  # required; Slack signing secret
@@ -1599,13 +1599,13 @@ llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api
     browser_config=BrowserConfig(
         headless=True
     ),  # optional; useful for changing headless mode or other browser configs
-)**
+)
 
 app.dependency_overrides[SlackBot] = lambda: slack_bot
 
 if __name__ == '__main__':
     import uvicorn
-    **uvicorn.run('integrations.slack.slack_api:app', host='0.0.0.0', port=3000)**
+    uvicorn.run('integrations.slack.slack_api:app', host='0.0.0.0', port=3000)
 ```
 
 # Models
@@ -1623,22 +1623,22 @@ azure_openai_api_key = os.getenv('AZURE_OPENAI_KEY')
 azure_openai_endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
 
 # Initialize the Azure OpenAI client
-**llm = AzureChatOpenAI(
+llm = AzureChatOpenAI(
     model_name='gpt-4o',
     openai_api_key=azure_openai_api_key,
     azure_endpoint=azure_openai_endpoint,
     deployment_name='gpt-4o',
     api_version='2024-08-01-preview',
-)**
+)
 
-**agent = Agent(
+agent = Agent(
     task='Go to amazon.com, search for laptop, sort by best rating, and give me the price of the first result',
     llm=llm,
     enable_memory=True,
-)**
+)
 
 async def main():
-    **await agent.run(max_steps=10)**
+    await agent.run(max_steps=10)
 
 asyncio.run(main())
 ```
@@ -1659,12 +1659,12 @@ def get_llm():
 	config = Config(retries={'max_attempts': 10, 'mode': 'adaptive'})
 	bedrock_client = boto3.client('bedrock-runtime', region_name='us-east-1', config=config)
 
-	return **ChatBedrockConverse(
+	return ChatBedrockConverse(
 		model_id='us.anthropic.claude-3-5-sonnet-20241022-v2:0',
 		temperature=0.0,
 		max_tokens=None,
 		client=bedrock_client,
-	)**
+	)
 
 # Define the task for the agent
 task = (
@@ -1675,16 +1675,16 @@ task = (
 
 llm = get_llm()
 
-**agent = Agent(
+agent = Agent(
 	task=args.query,
 	llm=llm,
 	controller=Controller(),
 	browser=browser,
 	validate_output=True,
-)**
+)
 
 async def main():
-	**await agent.run(max_steps=30)**
+	await agent.run(max_steps=30)
 	await browser.close()
 
 asyncio.run(main())
@@ -1704,15 +1704,15 @@ from browser_use import Agent
 # Load environment variables from .env file
 load_dotenv()
 
-**llm = ChatAnthropic(model_name='claude-3-7-sonnet-20250219', temperature=0.0, timeout=30, stop=None)**
+llm = ChatAnthropic(model_name='claude-3-7-sonnet-20250219', temperature=0.0, timeout=30, stop=None)
 
-**agent = Agent(
+agent = Agent(
 	task='Go to amazon.com, search for laptop, sort by best rating, and give me the price of the first result',
 	llm=llm,
-)**
+)
 
 async def main():
-	**await agent.run(max_steps=10)**
+	await agent.run(max_steps=10)
 
 asyncio.run(main())
 ```
@@ -1741,15 +1741,15 @@ async def run_search():
             '3. Click on first result'
             '4. Return the first comment'
         ),
-        **llm=ChatDeepSeek(
+        llm=ChatDeepSeek(
             base_url='https://api.deepseek.com/v1',
             model='deepseek-chat',
             api_key=SecretStr(api_key),
-        )**,
+        ),
         use_vision=False,
     )
 
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(run_search())
@@ -1774,17 +1774,17 @@ api_key = os.getenv('DEEPSEEK_API_KEY', '')
 async def run_search():
     agent = Agent(
         task=('go to amazon.com, search for laptop, sort by best rating, and give me the price of the first result'),
-        **llm=ChatDeepSeek(
+        llm=ChatDeepSeek(
             base_url='https://api.deepseek.com/v1',
             model='deepseek-reasoner',
             api_key=SecretStr(api_key),
-        )**,
+        ),
         use_vision=False,
         max_failures=2,
         max_actions_per_step=1,
     )
 
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(run_search())
@@ -1808,7 +1808,7 @@ from browser_use.browser.context import BrowserContextConfig
 load_dotenv()
 api_key = os.getenv('GEMINI_API_KEY')
 
-**llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api_key))**
+llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api_key))
 
 browser = Browser(
     config=BrowserConfig(
@@ -1819,14 +1819,14 @@ browser = Browser(
 )
 
 async def run_search():
-    **agent = Agent(
+    agent = Agent(
         task='Go to amazon.com, search for laptop, sort by best rating, and give me the price of the first result',
         llm=llm,
         max_actions_per_step=4,
         browser=browser,
-    )**
+    )
 
-    **await agent.run(max_steps=25)**
+    await agent.run(max_steps=25)
 
 if __name__ == '__main__':
     asyncio.run(run_search())
@@ -1842,15 +1842,15 @@ Use OpenAI's GPT-4o model as the LLM for the agent.
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
 
-**llm = ChatOpenAI(model='gpt-4o')**
-**agent = Agent(
+llm = ChatOpenAI(model='gpt-4o')
+agent = Agent(
 	task='Go to amazon.com, search for laptop, sort by best rating, and give me the price of the first result',
 	llm=llm,
-)**
+)
 
 
 async def main():
-	**await agent.run(max_steps=10)**
+	await agent.run(max_steps=10)
 
 
 asyncio.run(main())
@@ -1877,15 +1877,15 @@ async def run_search():
         task=(
             'Go to amazon.com, search for wireless headphones, filter by highest rating, and return the title and price of the first product'
         ),
-        **llm=ChatOpenAI(
+        llm=ChatOpenAI(
             base_url='https://api.x.ai/v1',
             model='grok-3-beta',
             api_key=SecretStr(api_key),
-        )**,
+        ),
         use_vision=False,
     )
 
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(run_search())
@@ -1912,15 +1912,15 @@ async def run_search():
             'Go to https://www.reddit.com/r/LocalLLaMA, search for "browser use" in the search bar, '
             'click on first result, and return the first comment'
         ),
-        **llm=ChatOpenAI(
+        llm=ChatOpenAI(
             base_url='https://api.novita.ai/v3/openai',
             model='deepseek/deepseek-v3-0324',
             api_key=SecretStr(api_key),
-        )**,
+        ),
         use_vision=False,
     )
 
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(run_search())
@@ -1940,13 +1940,13 @@ from browser_use import Agent
 async def run_search():
     agent = Agent(
         task="Search for a 'browser use' post on the r/LocalLLaMA subreddit and open it.",
-        **llm=ChatOllama(
+        llm=ChatOllama(
             model='qwen2.5:32b-instruct-q4_K_M',
             num_ctx=32000,
-        )**,
+        ),
     )
 
-    **result = await agent.run()**
+    result = await agent.run()
     return result
 
 if __name__ == '__main__':
@@ -1969,16 +1969,16 @@ async def run_search():
         task=(
             "1. Go to https://www.reddit.com/r/LocalLLaMA2. Search for 'browser use' in the search bar3. Click search4. Call done"
         ),
-        **llm=ChatOllama(
+        llm=ChatOllama(
             # model='qwen2.5:32b-instruct-q4_K_M',
             # model='qwen2.5:14b',
             model='qwen2.5:latest',
             num_ctx=128000,
-        )**,
+        ),
         max_actions_per_step=1,
     )
 
-    **await agent.run()**
+    await agent.run()
 
 if __name__ == '__main__':
     asyncio.run(run_search())
@@ -2015,36 +2015,36 @@ def get_llm(provider: str):
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Automate browser tasks using an LLM agent.')
-    **parser.add_argument(
+    parser.add_argument(
         '--query', type=str, help='The query to process', default='go to reddit and search for posts about browser-use'
-    )**
-    **parser.add_argument(
+    )
+    parser.add_argument(
         '--provider',
         type=str,
         choices=['openai', 'anthropic'],
         default='openai',
         help='The model provider to use (default: openai)',
-    )**
+    )
     return parser.parse_args()
 
 def initialize_agent(query: str, provider: str):
-    **llm = get_llm(provider)**
+    llm = get_llm(provider)
     controller = Controller()
     browser = Browser(config=BrowserConfig())
 
-    return **Agent(
+    return Agent(
         task=query,
         llm=llm,
         controller=controller,
         browser=browser,
         use_vision=True,
         max_actions_per_step=1,
-    )**, browser
+    ), browser
 
 async def main():
     args = parse_arguments()
-    **agent, browser = initialize_agent(args.query, args.provider)**
-    **await agent.run(max_steps=25)**
+    agent, browser = initialize_agent(args.query, args.provider)
+    await agent.run(max_steps=25)
     input('Press Enter to close the browser...')
     await browser.close()
 
@@ -2080,11 +2080,11 @@ async def run_browser_task(
     os.environ['OPENAI_API_KEY'] = api_key
 
     try:
-        **agent = Agent(
+        agent = Agent(
             task=task,
             llm=ChatOpenAI(model='gpt-4o'),
-        )**
-        **result = await agent.run()**
+        )
+        result = await agent.run()
         return result
     except Exception as e:
         return f'Error: {str(e)}'
@@ -2095,12 +2095,12 @@ def create_ui():
 
         with gr.Row():
             with gr.Column():
-                **api_key = gr.Textbox(label='OpenAI API Key', placeholder='sk-...', type='password')**
-                **task = gr.Textbox(
+                api_key = gr.Textbox(label='OpenAI API Key', placeholder='sk-...', type='password')
+                task = gr.Textbox(
                     label='Task Description',
                     placeholder='E.g., Find flights from New York to London for next week',
                     lines=3,
-                )**
+                )
                 model = gr.Dropdown(choices=['gpt-4', 'gpt-3.5-turbo'], label='Model', value='gpt-4')
                 headless = gr.Checkbox(label='Run Headless', value=True)
                 submit_btn = gr.Button('Run Task')
@@ -2108,17 +2108,17 @@ def create_ui():
             with gr.Column():
                 output = gr.Textbox(label='Output', lines=10, interactive=False)
 
-        **submit_btn.click(
+        submit_btn.click(
             fn=lambda *args: asyncio.run(run_browser_task(*args)),
             inputs=[task, api_key, model, headless],
             outputs=output,
-        )**
+        )
 
     return interface
 
 if __name__ == '__main__':
     demo = create_ui()
-    **demo.launch()**
+    demo.launch()
 ```
 
 ## Streamlit Demo
@@ -2151,26 +2151,26 @@ def get_llm(provider: str):
 
 # Function to initialize the agent
 def initialize_agent(query: str, provider: str):
-    **llm = get_llm(provider)**
+    llm = get_llm(provider)
     controller = Controller()
     browser = Browser(config=BrowserConfig())
 
-    return **Agent(
+    return Agent(
         task=query,
         llm=llm,
         controller=controller,
         browser=browser,
         use_vision=True,
         max_actions_per_step=1,
-    )**, browser
+    ), browser
 
 # Streamlit UI
-**st.title('Automated Browser Agent with LLMs 🤖')**
+st.title('Automated Browser Agent with LLMs 🤖')
 
-**query = st.text_input('Enter your query:', 'go to reddit and search for posts about browser-use')**
-**provider = st.radio('Select LLM Provider:', ['openai', 'anthropic'], index=0)**
+query = st.text_input('Enter your query:', 'go to reddit and search for posts about browser-use')
+provider = st.radio('Select LLM Provider:', ['openai', 'anthropic'], index=0)
 
-**if st.button('Run Agent'):
+if st.button('Run Agent'):
     st.write('Initializing agent...')
     agent, browser = initialize_agent(query, provider)
 
@@ -2179,7 +2179,7 @@ def initialize_agent(query: str, provider: str):
             await agent.run(max_steps=25)
         st.success('Task completed! 🎉')
 
-    asyncio.run(run_agent())**
+    asyncio.run(run_agent())
 
     st.button('Close Browser', on_click=lambda: asyncio.run(browser.close()))
 ```
@@ -2196,12 +2196,12 @@ Attempt to solve CAPTCHAs on a demo website.
 from langchain_openai import ChatOpenAI
 from browser_use import Agent
 
-**llm = ChatOpenAI(model='gpt-4o')**
-**agent = Agent(
+llm = ChatOpenAI(model='gpt-4o')
+agent = Agent(
     task='go to https://captcha.com/demos/features/captcha-demo.aspx and solve the captcha',
     llm=llm,
-)**
-**await agent.run()**
+)
+await agent.run()
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/captcha.py)
@@ -2215,26 +2215,26 @@ from pydantic import BaseModel
 from browser_use.agent.service import Agent
 from browser_use.controller.service import Controller
 
-**controller = Controller()**
+controller = Controller()
 
-**class WebpageInfo(BaseModel):
+class WebpageInfo(BaseModel):
     """Model for webpage link."""
-    link: str = 'https://appointment.mfa.gr/en/reservations/aero/ireland-grcon-dub/'**
+    link: str = 'https://appointment.mfa.gr/en/reservations/aero/ireland-grcon-dub/'
 
-**@controller.action('Go to the webpage', param_model=WebpageInfo)**
+@controller.action('Go to the webpage', param_model=WebpageInfo)
 def go_to_webpage(webpage_info: WebpageInfo):
     """Returns the webpage link."""
     return webpage_info.link
 
 async def main():
-    **task = (
+    task = (
         'Go to the Greece MFA webpage via the link I provided you.'
         'Check the visa appointment dates. If there is no available date in this month, check the next month.'
         'If there is no available date in both months, tell me there is no available date.'
-    )**
+    )
 
     model = ChatOpenAI(model='gpt-4o-mini')
-    **agent = Agent(task, model, controller=controller, use_vision=True)**
+    agent = Agent(task, model, controller=controller, use_vision=True)
 
     await agent.run()
 ```
@@ -2250,18 +2250,18 @@ from pydantic import BaseModel
 from browser_use import ActionResult, Agent, Controller
 from PyPDF2 import PdfReader
 
-**controller = Controller()**
+controller = Controller()
 CV = Path.cwd() / 'cv_04_24.pdf'
 
-**class Job(BaseModel):
+class Job(BaseModel):
     title: str
     link: str
     company: str
     fit_score: float
     location: str | None = None
-    salary: str | None = None**
+    salary: str | None = None
 
-**@controller.action('Save jobs to file - with a score how well it fits to my profile', param_model=Job)**
+@controller.action('Save jobs to file - with a score how well it fits to my profile', param_model=Job)
 def save_jobs(job: Job):
     with open('jobs.csv', 'a', newline='') as f:
         writer = csv.writer(f)
@@ -2269,7 +2269,7 @@ def save_jobs(job: Job):
 
     return 'Saved job to file'
 
-**@controller.action('Read my cv for context to fill forms')**
+@controller.action('Read my cv for context to fill forms')
 def read_cv():
     pdf = PdfReader(CV)
     text = ''
@@ -2277,9 +2277,9 @@ def read_cv():
         text += page.extract_text() or ''
     return ActionResult(extracted_content=text, include_in_memory=True)
 
-**@controller.action(
+@controller.action(
     'Upload cv to element - call this function to upload if element is not found, try with different index of the same upload element',
-)**
+)
 async def upload_cv(index: int, browser: BrowserContext):
     path = str(CV.absolute())
     dom_el = await browser.get_dom_element_by_index(index)
@@ -2292,21 +2292,21 @@ async def upload_cv(index: int, browser: BrowserContext):
         return ActionResult(error=f'Failed to upload file to index {index}')
 
 async def main():
-    **ground_task = (
+    ground_task = (
         'You are a professional job finder. '
         '1. Read my cv with read_cv'
         'find ml internships in and save them to a file'
         'search at company:'
-    )**
+    )
     tasks = [
         ground_task + '\n' + 'Google',
         # ...
     ]
 
-    **agents = []
+    agents = []
     for task in tasks:
         agent = Agent(task=task, llm=model, controller=controller, browser=browser)
-        agents.append(agent)**
+        agents.append(agent)
 
     await asyncio.gather(*[agent.run() for agent in agents])
 ```
@@ -2323,16 +2323,16 @@ import httpx
 from browser_use import Agent, Controller
 from browser_use.agent.views import ActionResult
 
-**class Profile(BaseModel):
+class Profile(BaseModel):
     platform: str
     profile_url: str
 
 class Profiles(BaseModel):
     profiles: list[Profile]
 
-controller = Controller(exclude_actions=['search_google'], output_model=Profiles)**
+controller = Controller(exclude_actions=['search_google'], output_model=Profiles)
 
-**@controller.registry.action('Search the web for a specific query')**
+@controller.registry.action('Search the web for a specific query')
 async def search_web(query: str):
     keys_to_use = ['url', 'title', 'content', 'author', 'score']
     headers = {'Authorization': f'Bearer {BEARER_TOKEN}'}
@@ -2352,12 +2352,12 @@ async def search_web(query: str):
     return ActionResult(extracted_content=result_text, include_in_memory=True)
 
 async def main():
-    **task = (
+    task = (
         'Go to this tiktok video url, open it and extract the @username from the resulting url. Then do a websearch for this username to find all his social media profiles. Return me the links to the social media profiles with the platform name.'
         ' https://www.tiktokv.com/share/video/7470981717659110678/  '
-    )**
+    )
     model = ChatOpenAI(model='gpt-4o')
-    **agent = Agent(task=task, llm=model, controller=controller)**
+    agent = Agent(task=task, llm=model, controller=controller)
 
     history = await agent.run()
 
@@ -2380,12 +2380,12 @@ Automate interactions with Google Sheets, including opening sheets, reading/writ
 from browser_use import ActionResult, Agent, Controller
 from browser_use.browser.context import BrowserContext
 
-**controller = Controller()**
+controller = Controller()
 
 def is_google_sheet(page) -> bool:
     return page.url.startswith('https://docs.google.com/spreadsheets/')
 
-**@controller.registry.action('Google Sheets: Open a specific Google Sheet')
+@controller.registry.action('Google Sheets: Open a specific Google Sheet')
 async def open_google_sheet(browser: BrowserContext, google_sheet_url: str):
     page = await browser.get_current_page()
     if page.url != google_sheet_url:
@@ -2393,29 +2393,29 @@ async def open_google_sheet(browser: BrowserContext, google_sheet_url: str):
         await page.wait_for_load_state()
     if not is_google_sheet(page):
         return ActionResult(error='Failed to open Google Sheet, are you sure you have permissions to access this sheet?')
-    return ActionResult(extracted_content=f'Opened Google Sheet {google_sheet_url}', include_in_memory=False)**
+    return ActionResult(extracted_content=f'Opened Google Sheet {google_sheet_url}', include_in_memory=False)
 
-**@controller.registry.action('Google Sheets: Get the contents of a specific cell or range of cells', page_filter=is_google_sheet)
+@controller.registry.action('Google Sheets: Get the contents of a specific cell or range of cells', page_filter=is_google_sheet)
 async def get_range_contents(browser: BrowserContext, cell_or_range: str):
     # ...
     await select_cell_or_range(browser, cell_or_range)
     await page.keyboard.press('ControlOrMeta+C')
     extracted_tsv = pyperclip.paste()
-    return ActionResult(extracted_content=extracted_tsv, include_in_memory=True)**
+    return ActionResult(extracted_content=extracted_tsv, include_in_memory=True)
 
-**@controller.registry.action('Google Sheets: Input text into the currently selected cell', page_filter=is_google_sheet)
+@controller.registry.action('Google Sheets: Input text into the currently selected cell', page_filter=is_google_sheet)
 async def input_selected_cell_text(browser: BrowserContext, text: str):
     page = await browser.get_current_page()
     await page.keyboard.type(text, delay=0.1)
     await page.keyboard.press('Enter')
     # ...
-    return ActionResult(extracted_content=f'Inputted text {text}', include_in_memory=False)**
+    return ActionResult(extracted_content=f'Inputted text {text}', include_in_memory=False)
 
 async def main():
     async with await browser.new_context() as context:
         model = ChatOpenAI(model='gpt-4o')
 
-        **researcher = Agent(
+        researcher = Agent(
             task="""
                 Google to find the full name, nationality, and date of birth of the CEO of the top 10 Fortune 100 companies.
                 For each company, append a row to this existing Google Sheet: https://docs.google.com/spreadsheets/d/1INaIcfpYXlMRWO__de61SHFCaqt1lfHlcvtXZPItlpI/edit
@@ -2430,7 +2430,7 @@ async def main():
             llm=model,
             browser_context=context,
             controller=controller,
-        )**
+        )
         await researcher.run()
 ```
 
@@ -2449,25 +2449,25 @@ async def main():
         model = ChatOpenAI(model='gpt-4o')
 
         # Initialize browser agent
-        **agent1 = Agent(
+        agent1 = Agent(
             task='Open an online code editor programiz.',
             llm=model,
             browser_context=context,
-        )**
-        **executor = Agent(
+        )
+        executor = Agent(
             task='Executor. Execute the code written by the coder and suggest some updates if there are errors.',
             llm=model,
             browser_context=context,
-        )**
+        )
 
-        **coder = Agent(
+        coder = Agent(
             task='Coder. Your job is to write and complete code. You are an expert coder. Code a simple calculator. Write the code on the coding interface after agent1 has opened the link.',
             llm=model,
             browser_context=context,
-        )**
-        **await agent1.run()
+        )
+        await agent1.run()
         await executor.run()
-        await coder.run()**
+        await coder.run()
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/online_coding_agent.py)
@@ -2494,32 +2494,32 @@ class TwitterConfig:
     base_url: str = 'https://x.com/home'
 
 # Customize these settings
-**config = TwitterConfig(
+config = TwitterConfig(
     openai_api_key=os.getenv('OPENAI_API_KEY'),
     chrome_path='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     target_user='XXXXX',
     message='XXXXX',
     reply_url='XXXXX',
     headless=False,
-)**
+)
 
 def create_twitter_agent(config: TwitterConfig) -> Agent:
     llm = ChatOpenAI(model=config.model, api_key=config.openai_api_key)
 
-    **browser = Browser(
+    browser = Browser(
         config=BrowserConfig(
             headless=config.headless,
             browser_binary_path=config.chrome_path,
         )
     )
 
-    controller = Controller()**
+    controller = Controller()
 
     # Construct the full message with tag
     full_message = f'@{config.target_user} {config.message}'
 
     # Create the agent with detailed instructions
-    **return Agent(
+    return Agent(
         task=f"""Navigate to Twitter and create a post and reply to a tweet.
 
         Here are the specific steps:
@@ -2538,11 +2538,11 @@ def create_twitter_agent(config: TwitterConfig) -> Agent:
         llm=llm,
         controller=controller,
         browser=browser,
-    )**
+    )
 
 async def main():
-    **agent = create_twitter_agent(config)
-    await agent.run()**
+    agent = create_twitter_agent(config)
+    await agent.run()
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/post_twitter.py)
@@ -2556,16 +2556,16 @@ from langchain_openai import ChatOpenAI
 from browser_use import Agent
 from browser_use.browser.browser import Browser, BrowserConfig
 
-**llm = ChatOpenAI(model='gpt-4o')**
+llm = ChatOpenAI(model='gpt-4o')
 
-**agent = Agent(
+agent = Agent(
     task="Navigate to 'https://en.wikipedia.org/wiki/Internet' and scroll to the string 'The vast majority of computer'",
     llm=llm,
     browser=Browser(config=BrowserConfig(headless=False)),
-)**
+)
 
 async def main():
-    **await agent.run()**
+    await agent.run()
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/scrolling_page.py)
@@ -2578,27 +2578,27 @@ Automate online grocery shopping, including searching for items, adding to cart,
 from langchain_openai import ChatOpenAI
 from browser_use import Agent, Browser
 
-**task = """
+task = """
    ### Prompt for Shopping Agent – Migros Online Grocery Order
 
-**Objective:**
+Objective:
 Visit [Migros Online](https://www.migros.ch/en), search for the required grocery items, add them to the cart, select an appropriate delivery window, and complete the checkout process using TWINT.
 
-**Important:**
+Important:
 - Make sure that you don't buy more than it's needed for each article.
 - After your search, if you click  the "+" button, it adds the item to the basket.
-..."""**
+..."""
 
-**browser = Browser()**
+browser = Browser()
 
-**agent = Agent(
+agent = Agent(
     task=task,
     llm=ChatOpenAI(model='gpt-4o'),
     browser=browser,
-)**
+)
 
 async def main():
-    **await agent.run()**
+    await agent.run()
     input('Press Enter to close the browser...')
     await browser.close()
 ```
@@ -2618,21 +2618,21 @@ from browser_use.browser.context import BrowserContext, BrowserContextConfig
 
 llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api_key))
 
-**browser = Browser(
+browser = Browser(
 	config=BrowserConfig()
-)**
+)
 
-**file_path = os.path.join(os.path.dirname(__file__), 'twitter_cookies.txt')
-context = BrowserContext(browser=browser, config=BrowserContextConfig(cookies_file=file_path))**
+file_path = os.path.join(os.path.dirname(__file__), 'twitter_cookies.txt')
+context = BrowserContext(browser=browser, config=BrowserContextConfig(cookies_file=file_path))
 
 async def main():
-	**agent = Agent(
+	agent = Agent(
 		browser_context=context,
 		task=('go to https://x.com. write a new post with the text "browser-use ftw", and submit it'),
 		llm=llm,
 		max_actions_per_step=4,
-	)**
-	**await agent.run(max_steps=25)**
+	)
+	await agent.run(max_steps=25)
 	input('Press Enter to close the browser...')
 ```
 
@@ -2661,7 +2661,7 @@ elif os.getenv('AZURE_OPENAI_KEY') and os.getenv('AZURE_OPENAI_ENDPOINT'):
 else:
     raise ValueError('No LLM found. Please set OPENAI_API_KEY or AZURE_OPENAI_KEY and AZURE_OPENAI_ENDPOINT.')
 
-**browser = Browser(
+browser = Browser(
     config=BrowserConfig(
         headless=False,  # This is True in production
         disable_security=True,
@@ -2674,21 +2674,21 @@ else:
             window_height=1100,
         ),
     )
-)**
+)
 
-**TASK = """
+TASK = """
 Find and book a hotel in Paris with suitable accommodations for a family of four (two adults and two children) offering free cancellation for the dates of February 14-21, 2025. on https://www.booking.com/
-"""**
+"""
 
 async def main():
-    **agent = Agent(
+    agent = Agent(
         task=TASK,
         llm=llm,
         browser=browser,
         validate_output=True,
         enable_memory=False,
-    )**
-    **history = await agent.run(max_steps=50)**
+    )
+    history = await agent.run(max_steps=50)
     history.save_to_file('./tmp/history.json')
 ```
 
@@ -2702,25 +2702,25 @@ Navigate Wikipedia by clicking links to get from a starting page (e.g., "Banana"
 from browser_use import Agent
 from browser_use.browser.browser import Browser, BrowserConfig, BrowserContextConfig
 
-**llm = ChatOpenAI(
+llm = ChatOpenAI(
 	model='gpt-4o',
 	temperature=0.0,
-)**
+)
 
-**task = 'go to https://en.wikipedia.org/wiki/Banana and click on buttons on the wikipedia page to go as fast as possible from banna to Quantum mechanics'**
+task = 'go to https://en.wikipedia.org/wiki/Banana and click on buttons on the wikipedia page to go as fast as possible from banna to Quantum mechanics'
 
-**browser = Browser(
+browser = Browser(
 	config=BrowserConfig(
 		new_context_config=BrowserContextConfig(
 			viewport_expansion=-1,
 			highlight_elements=False,
 		),
 	),
-)**
-**agent = Agent(task=task, llm=llm, browser=browser, use_vision=False)**
+)
+agent = Agent(task=task, llm=llm, browser=browser, use_vision=False)
 
 async def main():
-	**await agent.run()**
+	await agent.run()
 ```
 
 [View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/wikipedia_banana_to_quantum.py)
