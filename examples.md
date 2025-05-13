@@ -146,9 +146,120 @@ if __name__ == '__main__':
 
 Limit the availability of custom actions to specific domains or pages based on URL filters.
 
+```python
+import asyncio
+from playwright.async_api import Page
+from browser_use.agent.service import Agent, Browser, BrowserContext, Controller
+
+# Initialize controller and registry
+controller = Controller()
+registry = controller.registry
+
+# Action will only be available to Agent on Google domains because of the domain filter
+@registry.action(description='Trigger disco mode', domains=['google.com', '*.google.com'])
+async def disco_mode(browser: BrowserContext):
+    page = await browser.get_current_page()
+    await page.evaluate("""() => {
+        document.styleSheets[0].insertRule('@keyframes wiggle { 0% { transform: rotate(0deg); } 50% { transform: rotate(10deg); } 100% { transform: rotate(0deg); } }');
+
+        document.querySelectorAll("*").forEach(element => {
+            element.style.animation = "wiggle 0.5s infinite";
+        });
+    }""")
+
+# Create a custom page filter function that determines if the action should be available
+def is_login_page(page: Page) -> bool:
+    return 'login' in page.url.lower() or 'signin' in page.url.lower()
+
+# Use the page filter to limit the action to only be available on login pages
+@registry.action(description='Use the force, luke', page_filter=is_login_page)
+async def use_the_force(browser: BrowserContext):
+    # This will only ever run on pages that matched the filter
+    page = await browser.get_current_page()
+    assert is_login_page(page)
+
+    await page.evaluate("""() => { document.querySelector('body').innerHTML = 'These are not the droids you are looking for';}""")
+
+async def main():
+    browser = Browser()
+    agent = Agent(
+        task="""
+            Go to apple.com and trigger disco mode (if don't know how to do that, then just move on).
+            Then go to google.com and trigger disco mode.
+            After that, go to the Google login page and Use the force, luke.
+        """,
+        llm=ChatOpenAI(model='gpt-4o'),
+        browser=browser,
+        controller=controller,
+    )
+
+    await agent.run(max_steps=10)
+    await browser.close()
+```
+
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/action_filters.py)
+
 ## Advanced Search
 
 Implement a custom web search action using an external API (e.g., AskTessa) and process its results.
+
+```python
+from pydantic import BaseModel
+from browser_use import ActionResult, Agent, Controller
+import httpx
+
+class Person(BaseModel):
+    name: str
+    email: str | None = None
+
+class PersonList(BaseModel):
+    people: list[Person]
+
+controller = Controller(exclude_actions=['search_google'], output_model=PersonList)
+BEARER_TOKEN = os.getenv('BEARER_TOKEN')
+
+@controller.registry.action('Search the web for a specific query')
+async def search_web(query: str):
+    keys_to_use = ['url', 'title', 'content', 'author', 'score']
+    headers = {'Authorization': f'Bearer {BEARER_TOKEN}'}
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            'https://asktessa.ai/api/search',
+            headers=headers,
+            json={'query': query}
+        )
+
+    final_results = [
+        {key: source[key] for key in keys_to_use if key in source}
+        for source in response.json()['sources']
+        if source['score'] >= 0.8
+    ]
+    result_text = json.dumps(final_results, indent=4)
+    return ActionResult(extracted_content=result_text, include_in_memory=True)
+
+names = [
+    'Ruedi Aebersold',
+    'Bernd Bodenmiller',
+    # ... more names ...
+]
+
+async def main():
+    task = 'use search_web with "find email address of the following ETH professor:" for each of the following persons in a list of actions. Finally return the list with name and email if provided'
+    task += '\n' + '\n'.join(names)
+    model = ChatOpenAI(model='gpt-4o')
+    agent = Agent(task=task, llm=model, controller=controller, max_actions_per_step=20)
+
+    history = await agent.run()
+
+    result = history.final_result()
+    if result:
+        parsed: PersonList = PersonList.model_validate_json(result)
+
+        for person in parsed.people:
+            print(f'{person.name} - {person.email}')
+```
+
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/advanced_search.py)
 
 ## Clipboard
 
