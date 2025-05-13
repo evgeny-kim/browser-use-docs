@@ -28,7 +28,7 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-[View full example](../examples/simple.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/simple.py)
 
 # Browser
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 	asyncio.run(main())
 ```
 
-[View full example](../examples/browser/real_browser.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/browser/real_browser.py)
 
 ## Stealth
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 	asyncio.run(main())
 ```
 
-[View full example](../examples/browser/stealth.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/browser/stealth.py)
 
 ## Using Cdp
 
@@ -138,7 +138,7 @@ if __name__ == '__main__':
 	asyncio.run(main())
 ```
 
-[View full example](../examples/browser/using_cdp.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/browser/using_cdp.py)
 
 # Custom Functions
 
@@ -185,7 +185,7 @@ async def main():
     await agent.run()
 ```
 
-[View full example](../examples/custom-functions/clipboard.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/clipboard.py)
 
 ## Custom Hooks Before After Step
 
@@ -240,7 +240,7 @@ async def run_agent():
 asyncio.run(run_agent())
 ```
 
-[View full example](../examples/custom-functions/custom_hooks_before_after_step.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/custom_hooks_before_after_step.py)
 
 ## File Upload
 
@@ -310,7 +310,7 @@ async def main():
     await agent.run()
 ```
 
-[View full example](../examples/custom-functions/file_upload.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/file_upload.py)
 
 ## Hover Element
 
@@ -372,7 +372,7 @@ async def main():
     await agent.run()
 ```
 
-[View full example](../examples/custom-functions/hover_element.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/hover_element.py)
 
 ## Notification
 
@@ -410,7 +410,7 @@ async def main():
     await agent.run()
 ```
 
-[View full example](../examples/custom-functions/notification.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/notification.py)
 
 ## Onepassword 2fa
 
@@ -447,7 +447,7 @@ async def main():
     result = await agent.run()
 ```
 
-[View full example](../examples/custom-functions/onepassword_2fa.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/onepassword_2fa.py)
 
 ## Save To File Hugging Face
 
@@ -487,7 +487,7 @@ async def main():
 	await agent.run()
 ```
 
-[View full example](../examples/custom-functions/save_to_file_hugging_face.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/custom-functions/save_to_file_hugging_face.py)
 
 ## Validate Output
 
@@ -523,7 +523,7 @@ async def main():
 	await agent.run(max_steps=5)
 ```
 
-[View full example](../examples/features/validate_output.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/validate_output.py)
 
 # Features
 
@@ -561,7 +561,7 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-[View full example](../examples/features/click_fallback_options.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/click_fallback_options.py)
 
 ## Cross Origin Iframes
 
@@ -595,7 +595,7 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-[View full example](../examples/features/cross_origin_iframes.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/cross_origin_iframes.py)
 
 ## Custom Output
 
@@ -634,7 +634,7 @@ async def main():
 			print(f'Hours since post: {post.hours_since_post}')
 ```
 
-[View full example](../examples/features/custom_output.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/custom_output.py)
 
 ## Custom System Prompt
 
@@ -666,7 +666,7 @@ async def main():
     await agent.run()
 ```
 
-[View full example](../examples/features/custom_system_prompt.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/custom_system_prompt.py)
 
 ## Custom User Agent
 
@@ -702,7 +702,7 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-[View full example](../examples/features/custom_user_agent.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/custom_user_agent.py)
 
 ## Download File
 
@@ -732,7 +732,7 @@ async def run_download():
     await browser.close()
 ```
 
-[View full example](../examples/features/download_file.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/download_file.py)
 
 ## Drag Drop
 
@@ -763,7 +763,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/features/drag_drop.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/drag_drop.py)
 
 ## Follow Up Tasks
 
@@ -801,7 +801,7 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-[View full example](../examples/features/follow_up_tasks.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/follow_up_tasks.py)
 
 ## Initial Actions
 
@@ -830,7 +830,7 @@ if __name__ == '__main__':
 	asyncio.run(main())
 ```
 
-[View full example](../examples/features/initial_actions.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/initial_actions.py)
 
 ## Multi Tab Handling
 
@@ -853,7 +853,7 @@ async def main():
 asyncio.run(main())
 ```
 
-[View full example](../examples/features/multi-tab_handling.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/multi-tab_handling.py)
 
 ## Multiple Agents Same Browser
 
@@ -911,7 +911,7 @@ async def main():
             **asyncio.create_task(current_agent.run())**
 ```
 
-[View full example](../examples/features/multiple_agents_same_browser.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/multiple_agents_same_browser.py)
 
 ## Outsource State
 
@@ -951,7 +951,7 @@ done, valid = await agent.take_step()
     agent_state = AgentState.model_validate_json(loaded_json)**
 ```
 
-[View full example](../examples/features/outsource_state.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/outsource_state.py)
 
 ## Parallel Agents
 
@@ -999,7 +999,7 @@ async def main():
     await browser.close()
 ```
 
-[View full example](../examples/features/parallel_agents.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/parallel_agents.py)
 
 ## Pause Agent
 
@@ -1070,7 +1070,7 @@ async def main():
             agent_thread = None
 ```
 
-[View full example](../examples/features/pause_agent.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/pause_agent.py)
 
 ## Planner
 
@@ -1095,7 +1095,7 @@ if __name__ == '__main__':
 	asyncio.run(main())
 ```
 
-[View full example](../examples/features/planner.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/planner.py)
 
 ## Playwright Script Generation
 
@@ -1157,7 +1157,7 @@ async def main():
         await browser.close()
 ```
 
-[View full example](../examples/features/playwright_script_generation.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/playwright_script_generation.py)
 
 ## Restrict Urls
 
@@ -1194,7 +1194,7 @@ async def main():
 	# ...
 ```
 
-[View full example](../examples/features/restrict_urls.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/restrict_urls.py)
 
 ## Result Processing
 
@@ -1227,7 +1227,7 @@ print('\nThoughts:')
 **pprint(history.model_thoughts(), indent=4)**
 ```
 
-[View full example](../examples/features/result_processing.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/result_processing.py)
 
 ## Save Trace
 
@@ -1255,7 +1255,7 @@ async def main():
     await browser.close()
 ```
 
-[View full example](../examples/features/save_trace.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/save_trace.py)
 
 ## Sensitive Data
 
@@ -1282,7 +1282,7 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-[View full example](../examples/features/sensitive_data.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/sensitive_data.py)
 
 ## Small Model For Extraction
 
@@ -1304,7 +1304,7 @@ if __name__ == '__main__':
 	asyncio.run(main())
 ```
 
-[View full example](../examples/features/small_model_for_extraction.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/small_model_for_extraction.py)
 
 ## Task With Memory
 
@@ -1356,7 +1356,7 @@ async def main(max_steps=500):
         # ... process and save results ...
 ```
 
-[View full example](../examples/features/task_with_memory.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/task_with_memory.py)
 
 ## Validate Output
 
@@ -1392,7 +1392,7 @@ async def main():
 	await agent.run(max_steps=5)
 ```
 
-[View full example](../examples/features/validate_output.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/features/validate_output.py)
 
 # Integrations
 
@@ -1466,7 +1466,7 @@ class DiscordBot(commands.Bot):
             raise Exception(f'Browser-use task failed: {str(e)}')
 ```
 
-[View full example](../examples/integrations/discord/discord_api.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/integrations/discord/discord_api.py)
 
 ## Discord Example
 
@@ -1497,7 +1497,7 @@ llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api
 )**
 ```
 
-[View full example](../examples/integrations/discord/discord_example.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/integrations/discord/discord_example.py)
 
 ## Slack Api
 
@@ -1568,7 +1568,7 @@ async def slack_events(request: Request, slack_bot: Annotated[SlackBot, Depends(
     return {}
 ```
 
-[View full example](../examples/integrations/slack/slack_api.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/integrations/slack/slack_api.py)
 
 ## Slack Example
 
@@ -1643,7 +1643,7 @@ async def main():
 asyncio.run(main())
 ```
 
-[View full example](../examples/models/azure_openai.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/azure_openai.py)
 
 ## Bedrock Claude
 
@@ -1690,7 +1690,7 @@ async def main():
 asyncio.run(main())
 ```
 
-[View full example](../examples/models/bedrock_claude.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/bedrock_claude.py)
 
 ## Claude 3 7 Sonnet
 
@@ -1717,7 +1717,7 @@ async def main():
 asyncio.run(main())
 ```
 
-[View full example](../examples/models/claude-3.7-sonnet.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/claude-3.7-sonnet.py)
 
 ## Deepseek
 
@@ -1755,7 +1755,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/models/deepseek.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/deepseek.py)
 
 ## DeepSeek R1
 
@@ -1790,7 +1790,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/models/deepseek-r1.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/deepseek-r1.py)
 
 ## Gemini
 
@@ -1832,7 +1832,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/models/gemini.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/gemini.py)
 
 ## Gpt 4o
 
@@ -1856,7 +1856,7 @@ async def main():
 asyncio.run(main())
 ```
 
-[View full example](../examples/models/gpt-4o.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/gpt-4o.py)
 
 ## Grok
 
@@ -1891,7 +1891,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/models/grok.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/grok.py)
 
 ## Novita
 
@@ -1926,7 +1926,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/models/novita.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/novita.py)
 
 ## Ollama
 
@@ -1953,7 +1953,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/models/ollama.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/ollama.py)
 
 ## Qwen
 
@@ -1984,7 +1984,7 @@ if __name__ == '__main__':
     asyncio.run(run_search())
 ```
 
-[View full example](../examples/models/qwen.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/models/qwen.py)
 
 # UI
 
@@ -2052,7 +2052,7 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-[View full example](../examples/ui/command_line.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/ui/command_line.py)
 
 ## Gradio Demo
 
@@ -2184,7 +2184,7 @@ def initialize_agent(query: str, provider: str):
     st.button('Close Browser', on_click=lambda: asyncio.run(browser.close()))
 ```
 
-[View full example](../examples/ui/streamlit_demo.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/ui/streamlit_demo.py)
 
 # Use Cases
 
@@ -2204,7 +2204,7 @@ from browser_use import Agent
 **await agent.run()**
 ```
 
-[View full example](../examples/use-cases/captcha.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/captcha.py)
 
 ## Check Appointment
 
@@ -2239,7 +2239,7 @@ async def main():
     await agent.run()
 ```
 
-[View full example](../examples/use-cases/check_appointment.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/check_appointment.py)
 
 ## Find And Apply To Jobs
 
@@ -2311,7 +2311,7 @@ async def main():
     await asyncio.gather(*[agent.run() for agent in agents])
 ```
 
-[View full example](../examples/use-cases/find_and_apply_to_jobs.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/find_and_apply_to_jobs.py)
 
 ## Find Influencer Profiles
 
@@ -2370,7 +2370,7 @@ async def main():
             print(f'Profile URL: {profile.profile_url}')
 ```
 
-[View full example](../examples/use-cases/find_influencer_profiles.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/find_influencer_profiles.py)
 
 ## Google Sheets
 
@@ -2434,7 +2434,7 @@ async def main():
         await researcher.run()
 ```
 
-[View full example](../examples/use-cases/google_sheets.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/google_sheets.py)
 
 ## Online Coding Agent
 
@@ -2470,7 +2470,7 @@ async def main():
         await coder.run()**
 ```
 
-[View full example](../examples/use-cases/online_coding_agent.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/online_coding_agent.py)
 
 ## Post Twitter
 
@@ -2545,7 +2545,7 @@ async def main():
     await agent.run()**
 ```
 
-[View full example](../examples/use-cases/post_twitter.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/post_twitter.py)
 
 ## Scrolling Page
 
@@ -2568,7 +2568,7 @@ async def main():
     **await agent.run()**
 ```
 
-[View full example](../examples/use-cases/scrolling_page.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/scrolling_page.py)
 
 ## Shopping
 
@@ -2603,7 +2603,7 @@ async def main():
     await browser.close()
 ```
 
-[View full example](../examples/use-cases/shopping.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/shopping.py)
 
 ## Twitter Post Using Cookies
 
@@ -2636,7 +2636,7 @@ async def main():
 	input('Press Enter to close the browser...')
 ```
 
-[View full example](../examples/use-cases/twitter_post_using_cookies.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/twitter_post_using_cookies.py)
 
 ## Web Voyager Agent
 
@@ -2692,7 +2692,7 @@ async def main():
     history.save_to_file('./tmp/history.json')
 ```
 
-[View full example](../examples/use-cases/web_voyager_agent.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/web_voyager_agent.py)
 
 ## Wikipedia Banana To Quantum
 
@@ -2723,4 +2723,4 @@ async def main():
 	**await agent.run()**
 ```
 
-[View full example](../examples/use-cases/wikipedia_banana_to_quantum.py)
+[View full example](https://github.com/browser-use/browser-use/tree/0.1.46/examples/use-cases/wikipedia_banana_to_quantum.py)
